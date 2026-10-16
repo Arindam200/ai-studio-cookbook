@@ -91,6 +91,8 @@ Access Token Factory using various APIs:
 
 Numerous agent examples ranging from [starter](agents/README.md#-starter-agents) to [intermediate](agents/README.md#intermediate-agents) and [advanced](agents/README.md#advanced-agents).
 
+- [KubeTrace AI: Kubernetes incident repair with Beam](agents/kubetrace-ai/) — reproduce a real application fault, follow a bounded tool-calling agent through code repair and deployment, and inspect independent recovery checks.
+
 **Featured AI Agent frameworks:**
 
 [<img src="images/crewai-icon.svg" width="20" height="20"> CrewAI](agents/README.md#crewai)
