@@ -3,6 +3,7 @@
   - [WhatLLM](#whatllm)
   - [Allycat](#allycat)
   - [Customer Support AI](#customer-support-ai)
+  - [Splitter Lite](#splitter-lite)
 
 
 ## WhatLLM
@@ -54,5 +55,20 @@ context, and the interface hyperlinks answers only to those approved sources.
 The demo can be run locally or deployed to Vercel or Render.
 
 Built by [Amrrs](https://github.com/amrrs).
+
+---
+
+## Splitter Lite
+
+[Splitter Lite](splitter-lite/) is a Next.js bill-splitting app. Upload one
+or two bills, say who had what in plain English, and NVIDIA Nemotron 3.5 Super
+VL on Nebius Token Factory reads every line into structured JSON, then works
+out each share by calling calculator tools. The app re-checks the model's
+shares and flags any split that doesn't add up.
+
+| <img src="splitter-lite/screenshots/4-split.png" width="400">
+|-
+
+Built by [Amitesh Anand](https://github.com/Astrodevil).
 
 ---

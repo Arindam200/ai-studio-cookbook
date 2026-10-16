@@ -134,6 +134,7 @@ See also the official catalog: [docs.tokenfactory.nebius.com/integrations](https
 | Example | Description | Tech Stack |
 |---------|-------------|------------|
 | [Simple function calling](tool-calling/function_calling_1.ipynb) | Demonstrates how to call functions | Nebius AI |
+| [Splitter Lite](apps/splitter-lite/) | Bill-splitting app where a vision model reads receipts and splits them with calculator tool calls | Nebius AI (Nemotron 3.5 Super VL) + Next.js |
 
 ---
 
