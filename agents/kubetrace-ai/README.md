@@ -4,7 +4,7 @@ Use [Reflection Beam](https://reflection.ai/blog/introducing-beam) on [Nebius To
 
 The exercise is a small storefront checkout service on a disposable Kubernetes cluster. An injected pricing bug makes orders of 30 or more items return HTTP 500. The agent gets the incident description and typed tools; independent hidden checks decide whether the repair worked.
 
-The application stays in its upstream repository. This guide pins a revision for reproducible setup rather than maintaining a second copy of its backend, UI and Kubernetes manifests here.
+The complete application is included in this directory: Python API and agent, React UI, storefront, Kubernetes manifests, Dockerfiles, tests and sample reports. It is copied from upstream revision `6a111412eeaadd831f499aa6c72c55e3a99e7fef` under the [Apache-2.0 license](LICENSE). See [UPSTREAM.md](UPSTREAM.md) for provenance and cookbook-specific changes.
 
 ## What you will learn
 
@@ -33,7 +33,7 @@ flowchart LR
 
 The backend uses the official Python `openai` client with `base_url=https://api.tokenfactory.nebius.com/v1`. Pydantic argument models supply the tool schemas. The loop sends conversation history and tools with `tool_choice="auto"`, dispatches validated calls, and returns redacted, size-limited tool results to the model.
 
-There is no agent framework dependency. See the upstream [model client](https://github.com/Studio1-OSS/kubetrace-ai/blob/6a111412eeaadd831f499aa6c72c55e3a99e7fef/services/agent/kubetrace_agent/llm.py), [agent loop](https://github.com/Studio1-OSS/kubetrace-ai/blob/6a111412eeaadd831f499aa6c72c55e3a99e7fef/services/agent/kubetrace_agent/loop.py) and [typed tools](https://github.com/Studio1-OSS/kubetrace-ai/blob/6a111412eeaadd831f499aa6c72c55e3a99e7fef/services/agent/kubetrace_agent/tools.py).
+There is no agent framework dependency. See the included [model client](services/agent/kubetrace_agent/llm.py), [agent loop](services/agent/kubetrace_agent/loop.py) and [typed tools](services/agent/kubetrace_agent/tools.py).
 
 ## Prerequisites
 
@@ -44,17 +44,16 @@ There is no agent framework dependency. See the upstream [model client](https://
 
 Use a disposable local cluster for this exercise. Setup and fault injection intentionally change demo workloads. Live inference spends credits on your Token Factory account; fixture mode is available for checking the pipeline without a model.
 
-## 1. Get the application
+## 1. Get the cookbook
 
 ```bash
-git clone https://github.com/Studio1-OSS/kubetrace-ai.git
-cd kubetrace-ai
-git checkout --detach 6a111412eeaadd831f499aa6c72c55e3a99e7fef
+git clone https://github.com/nebius/token-factory-cookbook.git
+cd token-factory-cookbook/agents/kubetrace-ai
 cp .env.example .env
 uv sync
 ```
 
-The remaining commands run from this application directory, not the cookbook directory.
+Run the remaining commands from `agents/kubetrace-ai`. No separate application clone is needed.
 
 ## 2. Configure Beam on Token Factory
 
@@ -143,7 +142,7 @@ The agent calling `finish` with `outcome="resolved"` does not make the run succe
 
 Use **Markdown** or **JSON export** to retain a report, and **Replay** to inspect the recorded timeline. **Presentation mode** hides addresses, contexts, cluster IDs and registry hosts when sharing a report. Review the export before sharing it.
 
-The pinned application's published [sample reports and result tables](https://github.com/Studio1-OSS/kubetrace-ai/blob/6a111412eeaadd831f499aa6c72c55e3a99e7fef/docs/RESULTS.md) describe earlier Muse Spark Open runs and separately labelled fixtures. This recipe configures Beam; inspect your own run's provenance before attributing an outcome to Beam. The scenarios are demo exercises, not a general coding or Kubernetes benchmark.
+The included [sample reports and result tables](docs/RESULTS.md) describe earlier Muse Spark Open runs and separately labelled fixtures. This recipe configures Beam; inspect your own run's provenance before attributing an outcome to Beam. The scenarios are demo exercises, not a general coding or Kubernetes benchmark.
 
 ## 7. Try another incident
 
@@ -155,7 +154,7 @@ The pinned application's published [sample reports and result tables](https://gi
 | `memory-pressure` | Cache size exceeds the memory limit; make a bounded resource or configuration change. |
 | `partner-outage` | An external payment service is down; diagnose and escalate without changing another namespace. |
 
-Use **Setup → Inject → Investigate** for the next exercise. The upstream [scenario cookbook](https://github.com/Studio1-OSS/kubetrace-ai/blob/6a111412eeaadd831f499aa6c72c55e3a99e7fef/docs/COOKBOOK.md) explains the faults, checks and recorded outcomes.
+Use **Setup → Inject → Investigate** for the next exercise. The included [scenario cookbook](docs/COOKBOOK.md) explains the faults, checks and recorded outcomes.
 
 For a headless run on this disposable cluster, you can explicitly select automatic execution of policy-allowed changes:
 
@@ -167,7 +166,7 @@ This command performs setup, injection and investigation without the UI approval
 
 ## Optional: connect an existing Civo cluster
 
-The local recipe needs no Civo account. To use an existing Civo demo cluster instead, follow the upstream [Civo guide](https://github.com/Studio1-OSS/kubetrace-ai/blob/6a111412eeaadd831f499aa6c72c55e3a99e7fef/docs/CIVO.md).
+The local recipe needs no Civo account. To use an existing Civo demo cluster instead, follow the included [Civo guide](docs/CIVO.md).
 
 Set `CLUSTER_KIND=civo`, `CIVO_REGION`, `CIVO_CLUSTER_ID` and a `REGISTRY` the nodes can pull from; fill in `CIVO_API_KEY` server-side. The application fetches a kubeconfig but does not create Civo infrastructure. Civo nodes need pullable images; the local kind image-loading path does not apply. Cluster and registry costs are separate from Token Factory inference.
 
@@ -177,7 +176,7 @@ The harness uses admin access for experiment setup, injection, verification and 
 
 Cluster mutations pass an API-server dry run, an allowlist policy and a `resourceVersion` staleness check. Review approval does not bypass these controls. Logs, annotations, repository text and tool output are treated as untrusted data. Provider private reasoning fields are not stored.
 
-The Docker test runner has no network or credentials, mounts source read-only and uses resource limits. The upstream subprocess fallback is not isolated; reports identify it if used. See the [security model](https://github.com/Studio1-OSS/kubetrace-ai/blob/6a111412eeaadd831f499aa6c72c55e3a99e7fef/docs/SECURITY.md) for exact boundaries.
+The Docker test runner has no network or credentials, mounts source read-only and uses resource limits. The subprocess fallback is not isolated; reports identify it if used. See the [security model](docs/SECURITY.md) for exact boundaries.
 
 ## Troubleshooting
 
@@ -201,10 +200,21 @@ kind delete cluster --name kubetrace
 
 This deletes that cluster and its workloads. It does not delete local reports or Docker build images. For an existing Civo cluster, use the cleanup steps in the Civo guide; do not delete a shared cluster.
 
+## Test the included application
+
+These checks require no cluster or live inference:
+
+```bash
+uv run pytest tests/unit
+(cd apps/web && pnpm build && pnpm typecheck)
+```
+
+Cluster integration and UI tests are opt-in; follow the [testing guide](docs/TESTING.md). Run reports record the cookbook checkout commit. The copied application revision is documented separately in [UPSTREAM.md](UPSTREAM.md).
+
 ## Resources
 
 - [KubeTrace AI source and current documentation](https://github.com/Studio1-OSS/kubetrace-ai) — Apache-2.0 licensed application.
 - [Introducing Beam](https://reflection.ai/blog/introducing-beam).
 - [Beam on Nebius Token Factory](https://tokenfactory.nebius.com/?modals=endpoint-details&model-id=reflection/beam).
 - [Token Factory setup](../../start-here/setup.md).
-- [Upstream testing guide](https://github.com/Studio1-OSS/kubetrace-ai/blob/6a111412eeaadd831f499aa6c72c55e3a99e7fef/docs/TESTING.md).
+- [Testing guide](docs/TESTING.md).
