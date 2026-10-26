@@ -14,7 +14,7 @@ overrides:
   agent-browser>webdriverio: '-'
 
 patchedDependencies:
-  agent-browser@0.19.0: 919d8f41447f0d1165ac039628d1732e584449e9f72b4747432186792501a65e
+  agent-browser@0.19.0: a1dc25fe63b7e8dd794f406aed781dd559cd062892119f0272a9509ba70240e8
 
 importers:
 
@@ -3624,7 +3624,7 @@ snapshots:
   '@mastra/agent-browser@0.5.4(@mastra/core@1.76.0(supports-color@7.2.0)(zod-to-json-schema@3.25.2(zod@4.6.7))(zod@4.6.7))(zod@4.6.7)':
     dependencies:
       '@mastra/core': 1.76.0(supports-color@7.2.0)(zod-to-json-schema@3.25.2(zod@4.6.7))(zod@4.6.7)
-      agent-browser: 0.19.0(patch_hash=919d8f41447f0d1165ac039628d1732e584449e9f72b4747432186792501a65e)
+      agent-browser: 0.19.0(patch_hash=a1dc25fe63b7e8dd794f406aed781dd559cd062892119f0272a9509ba70240e8)
       zod: 4.6.7
     transitivePeerDependencies:
       - bufferutil
@@ -4177,7 +4177,7 @@ snapshots:
 
   agent-base@7.1.4: {}
 
-  agent-browser@0.19.0(patch_hash=919d8f41447f0d1165ac039628d1732e584449e9f72b4747432186792501a65e):
+  agent-browser@0.19.0(patch_hash=a1dc25fe63b7e8dd794f406aed781dd559cd062892119f0272a9509ba70240e8):
     dependencies:
       playwright-core: 1.64.0
       ws: 8.22.0

@@ -10,6 +10,14 @@ const adapterRequire = createRequire(require.resolve("@mastra/agent-browser"));
 const browserEntry = pathToFileURL(adapterRequire.resolve("agent-browser"));
 const { parseCommand } = await import(new URL("./protocol.js", browserEntry));
 
+test("Mastra's CDP adapter exposes browser tools without mobile dependencies", async () => {
+  const { AgentBrowser } = await import("@mastra/agent-browser");
+  const browser = new AgentBrowser({ cdpUrl: "ws://127.0.0.1:9222" });
+  const tools = browser.getTools();
+  assert.equal(typeof tools.browser_goto.execute, "function");
+  assert.equal(typeof tools.browser_snapshot.execute, "function");
+});
+
 test("browser commands retain typed header records after the Zod upgrade", () => {
   const parsed = parseCommand(JSON.stringify({
     id: "navigate-1", action: "navigate", url: "https://example.com",
