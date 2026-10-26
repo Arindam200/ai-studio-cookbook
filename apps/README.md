@@ -1,18 +1,25 @@
-# Cool Apps and Demos built with Nebius AI
+[Cookbook](../README.md) / Applications and demos
 
-  - [WhatLLM](#whatllm)
-  - [Allycat](#allycat)
-  - [Customer Support AI](#customer-support-ai)
-  - [Splitter Lite](#splitter-lite)
+# Applications and demos
 
+Explore complete applications built with Nebius Token Factory. Follow the linked project for its runtime, required keys, and deployment instructions.
+
+| Application | Workflow | Source |
+| --- | --- | --- |
+| [Splitter Lite](splitter-lite/) | Read receipts and split bills with vision and calculator tools | Included in this repository |
+| [WhatLLM](https://www.whatllm.org/) | Compare model responses | Hosted application |
+| [Allycat](https://github.com/The-AI-Alliance/allycat) | Search and chat over website content | External repository |
+| [Customer Support AI](https://github.com/amrrs/customer-support-ai) | Answer support questions with domain-restricted web retrieval | External repository |
+
+For agent applications, see [OpenCrewBot](../agents/mastra/opencrewbot/) and [KubeTrace AI](../agents/kubetrace-ai/). For environment help, see [setup](../start-here/setup.md).
 
 ## WhatLLM
 
-A cool and very useful LLM comparision tool
+A model comparison tool.
 
 [whatllm.org](https://www.whatllm.org/)
 
-Built by Dylan Bristot: [demianarc](https://github.com/demianarc)  |  [demian_ai](https://twitter.com/demian_ai)
+Built by Dylan Bristot: [demianarc](https://github.com/demianarc)  · [demian_ai](https://twitter.com/demian_ai)
 
 | ![](images/what-llm-1.png)
 |-

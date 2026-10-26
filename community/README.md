@@ -1,8 +1,10 @@
-# Community Contributions
+[Cookbook](../README.md) / Community
+
+# Community projects and articles
 
 Here are some examples and guides contributed by the community.
 
-Also check [events](events.md) supported by Nebius AI.
+Explore [community events](events.md) and [office hours](../office-hours/README.md).
 
 
 | Example                                                                                                                                                                                                                               | Description                                                                                                                                                    | Author                                         |
