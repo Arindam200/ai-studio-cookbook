@@ -10,8 +10,10 @@ Cookbook adaptations:
 - Changed guide links to the included source and documentation, while retaining upstream attribution and Beam/Token Factory references.
 - Added `apps/web/pnpm-workspace.yaml` to allow esbuild's platform setup when installing with pnpm 11+.
 - Explicitly retained the blank `.env.example` template despite parent cookbook ignore rules.
+- Added authentication regression tests and authorize API requests using the router path, independent of the Host header.
+- Updated Python and frontend dependencies to address published security advisories.
 - Omitted the generated `apps/web/tsconfig.tsbuildinfo` cache and ignored future TypeScript build caches.
 
-No Git metadata, credentials, kubeconfigs, local run database, installed dependencies or generated build output is included. Application source, lockfiles, Dockerfiles, deployment manifests, tests, docs and sanitized example reports are copied from the revision above.
+No Git metadata, credentials, kubeconfigs, local run database, installed dependencies or generated build output is included. Application source, Dockerfiles, deployment manifests, docs and sanitized example reports originate from the revision above, with the cookbook-specific changes listed here.
 
 For upstream development and contributions, see [Studio1-OSS/kubetrace-ai](https://github.com/Studio1-OSS/kubetrace-ai). Update this provenance note when refreshing the application copy.

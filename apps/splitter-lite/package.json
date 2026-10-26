@@ -19,9 +19,9 @@
     "lucide-react": "^0.508.0",
     "motion": "^14.2.0",
     "nanoid": "^5.1.5",
-    "next": "16.2.11",
+    "next": "16.4.3",
     "openai": "^7.32.0",
-    "pdfjs-dist": "^5.7.284",
+    "pdfjs-dist": "^6.4.299",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "server-only": "^0.0.1",
@@ -44,12 +44,12 @@
   "description": "A cookbook-sized Splitter: Nemotron 3.5 Super VL reads one or two bills with reasoning on and splits them with its own calculator tool calls.",
   "license": "MIT",
   "engines": {
-    "node": ">=20.9"
+    "node": ">=22.13.0"
   },
   "overrides": {
     "fast-uri": "3.1.4",
     "picomatch": "4.0.5",
-    "postcss": "8.5.22",
-    "sharp": "0.35.3"
+    "postcss": "8.5.31",
+    "sharp": "0.35.5"
   }
 }

@@ -49,7 +49,7 @@ The tools work in integer cents with largest-remainder rounding ([`src/lib/money
 
 ## Setup
 
-Requirements: Node.js 20.9 or newer, and a [Nebius Token Factory](https://tokenfactory.nebius.com) API key.
+Requirements: Node.js 22.13 or newer, and a [Nebius Token Factory](https://tokenfactory.nebius.com) API key.
 
 ```bash
 cd apps/splitter-lite

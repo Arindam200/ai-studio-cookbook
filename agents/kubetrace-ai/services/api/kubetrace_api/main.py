@@ -36,7 +36,10 @@ API_TOKEN = os.environ.get("KUBETRACE_API_TOKEN", "")
 @app.middleware("http")
 async def token_guard(request: Request, call_next):
     # Optional shared token for anything beyond localhost. EventSource cannot send headers, so ?token= is accepted.
-    if API_TOKEN and request.url.path.startswith("/api/") and request.url.path != "/api/health":
+    # Authorize the path used by the router. request.url is reconstructed from
+    # the untrusted Host header and must not decide whether a route is protected.
+    path = request.scope["path"]
+    if API_TOKEN and path.startswith("/api/") and path != "/api/health":
         supplied = request.headers.get("authorization", "").removeprefix("Bearer ").strip() or request.query_params.get("token", "")
         if supplied != API_TOKEN:
             return JSONResponse({"detail": "unauthorized"}, status_code=401)

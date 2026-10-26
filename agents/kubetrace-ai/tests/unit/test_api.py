@@ -63,3 +63,28 @@ def test_results_keep_provenances_apart_and_skip_replays(app):
     client.post("/api/runs/import", json=exported)
     rows = client.get("/api/results").json()
     assert sorted(r["provenance"] for r in rows) == ["civo-live", "fixture"]
+
+
+@pytest.mark.parametrize("host", [
+    "localhost",
+    "localhost/not-api?ignored=",
+    "localhost/api/health?ignored=",
+    "localhost#ignored",
+])
+def test_token_guard_cannot_be_bypassed_with_host_header(app, monkeypatch, host):
+    from fastapi.testclient import TestClient
+    monkeypatch.setattr(app, "API_TOKEN", "test-token")
+    client = TestClient(app.app)
+    assert client.get("/api/config", headers={"host": host}).status_code == 401
+
+
+@pytest.mark.parametrize("auth", [
+    {"headers": {"authorization": "Bearer test-token"}},
+    {"params": {"token": "test-token"}},
+])
+def test_token_guard_accepts_header_and_eventsource_token(app, monkeypatch, auth):
+    from fastapi.testclient import TestClient
+    monkeypatch.setattr(app, "API_TOKEN", "test-token")
+    client = TestClient(app.app)
+    assert client.get("/api/config", **auth).status_code == 200
+    assert client.get("/api/health").status_code == 200

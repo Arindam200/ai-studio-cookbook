@@ -26,11 +26,13 @@ export const isPdf = (file: File) => file.type === "application/pdf" || file.nam
 /** Returns one PNG blob per page (first MAX_PDF_PAGES pages), rendered at roughly 1600px wide. */
 export async function pdfToImages(file: File): Promise<{ pages: Blob[]; totalPages: number }> {
   if (file.size > 20 * 1024 * 1024) throw new Error("That PDF is over 20 MB.");
+  const pdfjs = await loadPdfJs();
+  const loadingTask = pdfjs.getDocument({ data: new Uint8Array(await file.arrayBuffer()) });
   let doc;
   try {
-    const pdfjs = await loadPdfJs();
-    doc = await pdfjs.getDocument({ data: new Uint8Array(await file.arrayBuffer()) }).promise;
+    doc = await loadingTask.promise;
   } catch (e) {
+    await loadingTask.destroy();
     console.error("PDF could not be opened", e);
     throw new Error(e instanceof Error && /password/i.test(e.message) ? "That PDF is password-protected." : "That PDF couldn't be opened. Try exporting it again or take a screenshot.");
   }
@@ -49,6 +51,6 @@ export async function pdfToImages(file: File): Promise<{ pages: Blob[]; totalPag
     }
     return { pages, totalPages: doc.numPages };
   } finally {
-    await doc.destroy();
+    await loadingTask.destroy();
   }
 }
