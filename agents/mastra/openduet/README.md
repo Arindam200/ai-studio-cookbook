@@ -265,6 +265,20 @@ It assumes one local owner and has no sign-in. To keep it that way, `pnpm dev` a
 - `src/lib/server/mock-model.ts`: the scripted model used without a Nebius key.
 - `src/components/`: the chat interface. `src/lib/client/store.ts` folds server events into state.
 
+## Cookbook maintenance
+
+The cookbook copy updates affected transitive dependencies, uses the standard Tailwind PostCSS integration, and adds credential-free dependency compatibility checks:
+
+```sh
+pnpm test
+pnpm typecheck
+pnpm lint
+pnpm build
+pnpm audit --prod
+```
+
+The pinned `agent-browser` patch adapts its protocol validation to Zod 4 and keeps the browser-manager exports used by Mastra. OpenDuet connects to Browserbase over CDP; unused iOS simulator and standalone CLI exports and their mobile-driver dependencies are excluded from this application's dependency tree. The patch and overrides are recorded in `pnpm-workspace.yaml`, matching [OpenCrewBot](../opencrewbot/). Refresh them together when updating the browser adapter.
+
 ## Contributing
 
 This is a copy of [Studio1-OSS/OpenDuet](https://github.com/Studio1-OSS/OpenDuet) for the Token Factory cookbook. Development happens there; issues and pull requests are welcome in that repo. Describe the workflow a change enables, run `pnpm exec tsc --noEmit` and `pnpm lint`, and say whether you tested it against live services or the mock model.

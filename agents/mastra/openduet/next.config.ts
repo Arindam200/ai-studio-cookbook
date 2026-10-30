@@ -19,14 +19,6 @@ const nextConfig: NextConfig = {
     "agent-browser",
     "quickjs-emscripten",
   ],
-  turbopack: {
-    rules: {
-      "*.css": {
-        loaders: ["@tailwindcss/turbopack"],
-        as: "*.css",
-      },
-    },
-  },
 };
 
 export default nextConfig;
