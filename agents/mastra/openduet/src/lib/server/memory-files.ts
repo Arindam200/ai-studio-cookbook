@@ -9,7 +9,8 @@ import { WORKSPACES_DIR } from "./config";
 export const MEMORY_PROMPT_LIMIT = { lines: 200, bytes: 16 * 1024 };
 
 export function workspaceDir(botId: string): string {
-  const dir = join(WORKSPACES_DIR, botId.replace(/[^a-zA-Z0-9_-]/g, ""));
+  if (!/^[a-zA-Z0-9_-]+$/.test(botId)) throw new Error(`Not a valid bot id: ${JSON.stringify(botId)}`);
+  const dir = join(WORKSPACES_DIR, botId);
   mkdirSync(dir, { recursive: true });
   return dir;
 }
@@ -24,8 +25,11 @@ export function readMemory(botId: string): string {
 }
 
 const SECRET_PATTERNS: RegExp[] = [
-  /\b(sk|pk|rk|tvly|ak|ghp|gho|xox[abp])[-_][A-Za-z0-9_-]{12,}\b/g,
+  /\b(sk|pk|rk|tvly|ak|ghp|gho|ghu|ghs|github_pat|bb_live|xox[abp])[-_][A-Za-z0-9_-]{12,}\b/g,
   /\bAKIA[0-9A-Z]{16}\b/g,
+  /\bAIza[0-9A-Za-z_-]{35}\b/g,
+  /\beyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}/g,
+  /\bBearer\s+[A-Za-z0-9._~+/-]{16,}=*/g,
   /-----BEGIN [A-Z ]*PRIVATE KEY-----[\s\S]*?-----END [A-Z ]*PRIVATE KEY-----/g,
   /\b(password|passwd|secret|api[_-]?key|token)\s*[:=]\s*\S+/gi,
 ];
@@ -91,6 +95,6 @@ export function editMemory(botId: string, find: string, replace: string): { ok: 
   const count = content.split(find).length - 1;
   if (!find || count === 0) return { ok: false, reason: "That exact text isn't in MEMORY.md. Read it again and copy the text exactly." };
   if (count > 1) return { ok: false, reason: `That text appears ${count} times. Include more surrounding words so it matches once.` };
-  writeMemory(botId, content.replace(find, replace));
+  writeMemory(botId, content.replace(find, () => replace));
   return { ok: true };
 }

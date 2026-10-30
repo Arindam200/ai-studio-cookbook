@@ -161,6 +161,7 @@ export async function updateBot(id: string, patch: Partial<BotInput>): Promise<B
 }
 
 export async function deleteBot(id: string): Promise<void> {
+  if (!(await store.getBot(id))) throw new InputError("That bot doesn't exist.");
   await stopConversation(`dm:${id}`);
   await resetBot(id);
   await store.deleteBotRow(id);

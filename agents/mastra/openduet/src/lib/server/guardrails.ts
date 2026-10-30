@@ -11,7 +11,7 @@ const MONEY_APPS = /^(stripe|plaid|paypal|wise|mercury|brex|ramp|square|venmo|re
 const TRADING_ACTION = /(^|_)(trades?|orders?|buy|sell|positions?)(_|$)/;
 const MONEY_ACTION = /(^|_)(transfers?|payouts?|withdraw(al)?s?|wire|send_money|move_money|ach)(_|$)/;
 /** Unambiguous in any app, for MCP tools where the app isn't known. */
-const ANY_APP_TRADING = /(^|_)(trades?|place_order_(stock|crypto|option)s?)(_|$)/;
+const ANY_APP_TRADING = /(^|_)(trades?|place_order_(stock|crypto|option)s?|place_(stock|crypto|options?)_orders?|close_(all_)?positions?)(_|$)/;
 const ANY_APP_MONEY = /(^|_)(payouts?|withdraw(al)?s?|wire_transfer|bank_transfer|send_money|move_money)(_|$)/;
 
 const TRADING = "Trading securities or crypto is off limits for bots, even with your approval.";
@@ -20,7 +20,8 @@ const MOVING_MONEY = "Moving money between accounts is off limits for bots, even
 /** Why this app action is off limits, or null when it may run. `app` is
  * Composio's toolkit ("stripe"), or undefined for an MCP tool. */
 export function offLimits(app: string | undefined, action: string): string | null {
-  const a = action.toLowerCase();
+  // MCP tools use any naming style: placeStockOrder and place-stock-order become place_stock_order.
+  const a = action.replace(/([a-z\d])([A-Z])/g, "$1_$2").replace(/[-\s]+/g, "_").toLowerCase();
   // Reading a balance or an order history is fine; only actions that create or send are blocked.
   if (/^(get|list|search|read|fetch|find|view|retrieve)(_|$)/.test(a) && !/(^|_)(create|send|submit|place|execute|initiate|make|post)(_|$)/.test(a)) {
     return null;

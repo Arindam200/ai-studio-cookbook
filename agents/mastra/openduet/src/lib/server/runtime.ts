@@ -204,18 +204,26 @@ async function sessionFor(bot: Bot, conversationId: ConversationId, routine = fa
   const threadId = `${conversationId}:${bot.id}:${generation}${routine ? ":routine" : ""}`;
   const k = key(conversationId, bot.id, routine);
   const cached = state.sessions.get(k);
-  if (cached && cached.thread.getId() === threadId) return cached;
+  if (cached && cached.thread.getId() === threadId) {
+    await applyActPolicy(cached, bot, routine);
+    return cached;
+  }
   const session = await runtime.controller.createSession({ resourceId: OWNER_ID, scope: conversationId, threadId });
   await session.permissions.setForCategory({ category: "read", policy: "allow" });
   await session.permissions.setForCategory({ category: "edit", policy: "allow" });
   await session.permissions.setForCategory({ category: "other", policy: "allow" });
-  // Connected apps and MCP servers act on real accounts: ask first unless the bot has full access.
-  // Work the bot starts on its own always asks, even with full access.
+  await applyActPolicy(session, bot, routine);
+  state.sessions.set(k, session);
+  return session;
+}
+
+/** Connected apps and MCP servers act on real accounts: ask first unless the bot has full access.
+ * Work the bot starts on its own always asks, even with full access. Applied on every turn: a busy
+ * bot keeps its cached sessions when its settings change, so switching to "Ask first" must still hold. */
+async function applyActPolicy(session: Session, bot: Bot, routine: boolean): Promise<void> {
   const acts = bot.approval === "full" && !routine ? "allow" : "ask";
   await session.permissions.setForCategory({ category: "mcp", policy: acts });
   await session.permissions.setForCategory({ category: "execute", policy: acts });
-  state.sessions.set(k, session);
-  return session;
 }
 
 // ── running state ──────────────────────────────────────────────────────

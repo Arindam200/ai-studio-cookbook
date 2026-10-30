@@ -133,7 +133,8 @@ export function toolCategory(toolName: string): ToolCategory | null {
   if (toolName.startsWith("memory_")) return "edit";
   if (toolName === "send_email") return "mcp";
   if (toolName.startsWith("browser_")) {
-    return /snapshot|screenshot|scroll|wait|tabs|close|get_|read|extract|console/.test(toolName) ? "read" : "execute";
+    // browser_tabs is not here: its "new" action opens a URL.
+    return /snapshot|screenshot|scroll|wait|close|get_|read|extract|console/.test(toolName) ? "read" : "execute";
   }
   return "other";
 }
